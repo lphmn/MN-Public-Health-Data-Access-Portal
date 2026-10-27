@@ -4,7 +4,7 @@ source("./Data/df_globalSchsacChb.R")
 #* Childhood Lead Exposure and clean data
 #* I will have to do some performance testing to see if it is better to do these calculations all here or to do the calculations based on selected parms
 #* My assumption is to pre-compile all the calculations, loading will be a little slower but application interaction should be better 
-df_leadRaw <-  read.csv("https://raw.githubusercontent.com/quinCHB/Public-Data-Sources/main/MN%20Public%20Health%20Data%20Access%20Portal/Healthy%20Homes/Childhood%20Lead%20Exposure.csv") |> 
+df_leadRaw <-  read.csv("https://raw.githubusercontent.com/lphmn/data_publicState/refs/heads/main/MN_PHDAP/healthyHomes/childhoodLeadExposure.csv") |> 
   janitor::clean_names() |>
   
   #Removed MN because I am going to calculate it like region and chb
