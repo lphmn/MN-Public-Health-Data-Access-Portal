@@ -18,13 +18,13 @@ library(shinyjs)
 # Load Data ---------------------------------------------------------------
 
 # State Community Health Services Advisory Committee as of 1_17_2024
-df_schsacRaw <- read.csv("https://raw.githubusercontent.com/quinCHB/Public-Data-Sources/main/MN%20SCHSAC%20%26%20CHB%20Regions/State%20Community%20Health%20Services%20Advisory%20Committee%20as%20of%201_17_2024.csv")
+df_schsacRaw <- read.csv("https://raw.githubusercontent.com/lphmn/data_publicState/refs/heads/main/MN_Regions/SchsacRegionChbCounty.csv")
 # Community Health Board as of 1_17_2024
-df_chbRaw <- read.csv("https://raw.githubusercontent.com/quinCHB/Public-Data-Sources/main/MN%20SCHSAC%20%26%20CHB%20Regions/Community%20Health%20Board%20as%20of%201_17_2024.csv")
+df_chbRaw <- read.csv("https://raw.githubusercontent.com/lphmn/data_publicState/refs/heads/main/MN_Regions/SchsacRegionChbCounty.csv")
 
 #Healthy Homes
 #* Childhood Lead Exposure
-df_leadRaw <-  read.csv("https://raw.githubusercontent.com/quinCHB/Public-Data-Sources/main/MN%20Public%20Health%20Data%20Access%20Portal/Healthy%20Homes/Childhood%20Lead%20Exposure.csv")
+df_leadRaw <-  read.csv("https://raw.githubusercontent.com/lphmn/data_publicState/refs/heads/main/MN_PHDAP/healthyHomes/childhoodLeadExposure.csv")
 #Radon
 
 # User Interface ----------------------------------------------------------
