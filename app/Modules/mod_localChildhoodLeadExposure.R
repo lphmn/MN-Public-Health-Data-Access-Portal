@@ -50,7 +50,7 @@ mod_localChildhoodLeadExposureUI <- function(id) {
                   tags$a(href="https://data.web.health.state.mn.us/lead_query", "here!", target= "_blank")
           ),
           tags$h3("Data for this project is stored ",
-                  tags$a(href="https://raw.githubusercontent.com/quinCHB/Public-Data-Sources/main/MN%20Public%20Health%20Data%20Access%20Portal/Healthy%20Homes/Childhood%20Lead%20Exposure.csv",
+                  tags$a(href="https://raw.githubusercontent.com/lphmn/data_publicState/refs/heads/main/MN_Regions/SchsacRegionChbCounty.csv",
                          "here!", target= "_blank")
           )
         )
