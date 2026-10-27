@@ -8,6 +8,7 @@
 library(shiny)
 library(shinydashboard)
 library(ggplot2)
+library(shinyjs)
 #library(dplyr)
 #Loading shinyjs really slowed down my application load time. By loading just the functions I required such as shnyjs::useShinyjs(), my application ran way faster
 #library(shinyjs)
@@ -29,45 +30,50 @@ df_leadRaw <-  read.csv("https://raw.githubusercontent.com/quinCHB/Public-Data-S
 # User Interface ----------------------------------------------------------
 ui <- dashboardPage(
   dashboardHeader(
-    title = "MN Public Health Data Access Portal",
+    title = tags$span("MN Public Health Data Access Portal", style = "color: #ffffff; font-weight: 700;"),
     titleWidth = 400
     #disable = TRUE #uncomment if the header should be hid
   ),
   dashboardSidebar(
     width = 350, #This makes the sidebar wider. However, the input boxes seem to have a set dimension resulting in long names still wrapping
+    tags$div(class = "sr-only", "Main navigation and filters for the Minnesota Public Health Data Access Portal"),
     # The next items require
     #The input parameters are global parameters
-    checkboxInput(inputId = "parGlobal_hideNarrative", label = "HIDE NARRATIVE"),
+    checkboxInput(
+      inputId = "parGlobal_hideNarrative",
+      label = tags$span("HIDE NARRATIVE", style = "font-weight: 600; color: #111111;"),
+      value = FALSE
+    ),
     # Other input elements...
     selectInput(
       "parGlobal_county",
-      label= "Select County of Interest",
-      choices= sort(unique(df_schsacRaw$County)),
-      selected= "Kittson",
-      multiple= FALSE,
-      width= 350 
+      label = tags$span("Select County of Interest", style = "font-weight: 600; color: #111111;"),
+      choices = sort(unique(df_schsacRaw$County)),
+      selected = "Kittson",
+      multiple = FALSE,
+      width = 350
     ),
     selectInput(
       "parGlobal_region",
-      label= "Select SCHSAC Region",
-      choices= NULL,
-      selected= NULL,
-      multiple= FALSE,
-      width= 350 
+      label = tags$span("Select SCHSAC Region", style = "font-weight: 600; color: #111111;"),
+      choices = NULL,
+      selected = NULL,
+      multiple = FALSE,
+      width = 350
     ),
     selectInput(
       "parGlobal_chb",
-      label= "Select Community Health Board",
-      choices= NULL,
-      selected= NULL,
-      multiple= FALSE,
-      width= 350 
+      label = tags$span("Select Community Health Board", style = "font-weight: 600; color: #111111;"),
+      choices = NULL,
+      selected = NULL,
+      multiple = FALSE,
+      width = 350
     ),
     #Sidebar is required to have sub menus because it requires the tabName to reference
     #By having sidebarMenu id, you can reference it and hide other filters with shinyjs 
     # The CHB and Region Filters are greyed out when onthe Region & CHB Defintions
     sidebarMenu(
-      id= "smID",
+      id = "smID",
       menuItem("Home", tabName = "tn_homePage"),
       menuItem("Region & CHB Defintions", tabName = "tn_regionChbDefinations"),
       menuItem("Child Health", tabName = "tn_childHealth"),
@@ -80,14 +86,109 @@ ui <- dashboardPage(
     )
   ),
   dashboardBody(
-    shinyjs::useShinyjs(), #Thank you Abby Stamm at MDH for suggesting to only call one function in a package rather then load entire package 
+    tags$head(
+      tags$style(HTML(" 
+        :root {
+          color-scheme: light;
+        }
+        body {
+          background-color: #ffffff;
+          color: #111111;
+          line-height: 1.5;
+        }
+        .content-wrapper,
+        .right-side,
+        .main-sidebar {
+          background-color: #f7f7f7;
+        }
+        .main-sidebar .sidebar-menu > li > a,
+        .main-header .logo,
+        .main-header .navbar,
+        .main-header .navbar-static-top,
+        .main-header .navbar-nav > li > a {
+          color: #111111;
+        }
+        .main-header {
+          background-color: #0d4f8b;
+          border-bottom: 3px solid #083f6b;
+        }
+        .box,
+        .box-body,
+        .box-header {
+          border: 1px solid #d0d0d0;
+          color: #111111;
+        }
+        .nav-tabs > li > a,
+        .nav-tabs > li.active > a,
+        .nav-tabs > li.active > a:hover,
+        .nav-tabs > li.active > a:focus {
+          color: #111111;
+        }
+        .form-control,
+        .selectize-input,
+        .selectize-dropdown {
+          border: 2px solid #4d4d4d;
+          min-height: 38px;
+          color: #111111;
+          background-color: #ffffff;
+        }
+        .form-control:focus,
+        .selectize-input:focus,
+        .selectize-input.focus,
+        .sidebar-menu > li > a:focus,
+        .nav-tabs > li > a:focus,
+        .btn:focus,
+        input:focus,
+        select:focus,
+        button:focus,
+        a:focus {
+          outline: 3px solid #005fcc !important;
+          outline-offset: 3px;
+          box-shadow: 0 0 0 3px rgba(0, 95, 204, 0.25) !important;
+        }
+        .checkbox,
+        .radio,
+        label,
+        .shiny-input-container {
+          color: #111111;
+        }
+        h1, h2, h3, h4, h5, h6, p, li, td, th {
+          color: #111111;
+        }
+        a {
+          color: #0b57a6;
+        }
+        .sr-only {
+          position: absolute;
+          width: 1px;
+          height: 1px;
+          padding: 0;
+          margin: -1px;
+          overflow: hidden;
+          clip: rect(0, 0, 0, 0);
+          white-space: nowrap;
+          border: 0;
+        }
+      ")),
+      tags$script(HTML(" 
+        $(document).ready(function() {
+          $('.sidebar-menu a').attr('aria-label', function() {
+            return $(this).text().trim();
+          });
+          $('.nav-tabs a').attr('aria-label', function() {
+            return $(this).text().trim();
+          });
+        });
+      "))
+    ),
+    shinyjs::useShinyjs(),
     fluidRow(
       column(12,
              tabItems(
                tabItem(
                  tabName = "tn_homePage", #tabName is what ties the menuItem to the tabItem
                  tabsetPanel(
-                   id="tpId_home",
+                   id = "tpId_home",
                    tabPanel(
                      "Home Page",
                      fluidRow(
@@ -95,17 +196,15 @@ ui <- dashboardPage(
                        column(
                          width = 12,
                          tags$h1("Welcome to the Landing Page for This Awesome Dashboard...Subjective of Course :)"),
-                         tags$h4("This shinyLive application is designed to minor the work represeted ", 
-                                 tags$a(href="https://data.web.health.state.mn.us/web/mndata/", "here!", target= "_blank")
-                         ),
-        
+                         tags$h4("This shinyLive application is designed to minor the work represeted ",
+                                 tags$a(href="https://data.web.health.state.mn.us/web/mndata/", "here!", target = "_blank", tabindex = "0")),
+
                          tags$h4("The features displayed on the left are called sidebar menus."),
                          tags$h3("Currently, only two sidebar menus are working"),
                          tags$h4("The Region & CHB Defintions sidebar menu has both tabs (Region and CHB) working"),
                          tags$h4("The Healthy Homes sidebar menu only has the Childhood Lead Exposure tab working"),
-                         tags$h4("Limitations to the Childhood Lead Exposure data can be found ", 
-                                 tags$a(href="https://data.web.health.state.mn.us/lead_metadata", "here!", target= "_blank")
-                         )
+                         tags$h4("Limitations to the Childhood Lead Exposure data can be found ",
+                                 tags$a(href="https://data.web.health.state.mn.us/lead_metadata", "here!", target = "_blank", tabindex = "0"))
                        )
                      )
                    )
@@ -114,7 +213,7 @@ ui <- dashboardPage(
                tabItem(
                  tabName = "tn_regionChbDefinations",
                  tabsetPanel(
-                   id="tpId_RegionChb",
+                   id = "tpId_RegionChb",
                    tabPanel(
                      "Region",
                      fluidRow(
@@ -125,7 +224,7 @@ ui <- dashboardPage(
                          h3("For this tab, the Select SCHSAC Region and Select Community Health Board filters are greyed out because they do not execute any function on this tab."),
                          h3("The purpose for this tab is to provide a quick reference for what counties fall under which region."),
                          #The next line inserts a line between the narrative and the data
-                         tags$hr(style = "border-top: 1px solid #ccc; margin-top: 20px; margin-bottom: 20px;")
+                         tags$hr(style = "border-top: 2px solid #4d4d4d; margin-top: 20px; margin-bottom: 20px;")
                        )
                      ),
                      fluidRow(
@@ -142,7 +241,7 @@ ui <- dashboardPage(
                          h3("For this tab, the Select SCHSAC Region and Select Community Health Board filters are greyed out because they don't have any functions on this page."),
                          h3("The purpose for this tab is to provide a quick reference for what counties fall under which Community Health Board."),
                          #The next line inserts a line between the narrative and the data
-                         tags$hr(style = "border-top: 1px solid #ccc; margin-top: 20px; margin-bottom: 20px;")
+                         tags$hr(style = "border-top: 2px solid #4d4d4d; margin-top: 20px; margin-bottom: 20px;")
                        )
                      ),
                      fluidRow(
@@ -225,26 +324,26 @@ ui <- dashboardPage(
                tabItem(
                  tabName = "tn_healthyHomes",
                  tabsetPanel(
-                   id="tpId_healthyHomes",
+                   id = "tpId_healthyHomes",
                    tabPanel("Carbon Monoxide (CO) Poisoning"),
                    tabPanel("Childhood Lead Exposure",
                             fluidRow(
                               # Narrative section explaining the purpose of the dashboard
                               column(
-                                width= 1,
+                                width = 1,
                                 selectInput(
                                   "parLocal_leadYear",
-                                  label= "Select Year",
-                                  choices= sort(unique(df_leadRaw$year), decreasing = TRUE),
-                                  selected= max(unique(df_leadRaw$year)),
-                                  multiple= FALSE
+                                  label = tags$span("Select Year", style = "font-weight: 600; color: #111111;"),
+                                  choices = sort(unique(df_leadRaw$year), decreasing = TRUE),
+                                  selected = max(unique(df_leadRaw$year)),
+                                  multiple = FALSE
                                 ),
                                 selectInput(
                                   "par_leadStateRegionChb",
-                                  label= "Select Comparison",
-                                  choices= c("All", "CHB", "Region", "State"),
-                                  selected= "All",
-                                  multiple= FALSE
+                                  label = tags$span("Select Comparison", style = "font-weight: 600; color: #111111;"),
+                                  choices = c("All", "CHB", "Region", "State"),
+                                  selected = "All",
+                                  multiple = FALSE
                                 )
                               ),
                               # Narrative section explaining the purpose of the dashboard
@@ -252,23 +351,20 @@ ui <- dashboardPage(
                                 width = 11,
                                 id = "cID_leadNarrative",
                                 tags$h4(htmlOutput("lead_narrative")),
-                                tags$h3("For information about why this data is important please visit ", 
-                                        tags$a(href="https://data.web.health.state.mn.us/lead", "here!", target= "_blank")
-                                ),
-                                tags$h3("Data for this project can be found ", 
-                                        tags$a(href="https://data.web.health.state.mn.us/lead_query", "here!", target= "_blank")
-                                ),
-                                tags$h3("Data for this project is stored ", 
-                                        tags$a(href="https://raw.githubusercontent.com/quinCHB/Public-Data-Sources/main/MN%20Public%20Health%20Data%20Access%20Portal/Healthy%20Homes/Childhood%20Lead%20Exposure.csv", 
-                                               "here!", target= "_blank")
-                                )
+                                tags$h3("For information about why this data is important please visit ",
+                                        tags$a(href = "https://data.web.health.state.mn.us/lead", "here!", target = "_blank", tabindex = "0")),
+                                tags$h3("Data for this project can be found ",
+                                        tags$a(href = "https://data.web.health.state.mn.us/lead_query", "here!", target = "_blank", tabindex = "0")),
+                                tags$h3("Data for this project is stored ",
+                                        tags$a(href = "https://raw.githubusercontent.com/quinCHB/Public-Data-Sources/main/MN%20Public%20Health%20Data%20Access%20Portal/Healthy%20Homes/Childhood%20Lead%20Exposure.csv",
+                                               "here!", target = "_blank", tabindex = "0"))
                               )
                             ),
                             fluidRow(
                               #The next line inserts a line between the narrative and the data.
-                              #It is added here instead of in the narrative since the narrative can have multiple columns. 
-                              #If there are multiple narrative columns and the line is added there than the line consists of multiple breaks 
-                              tags$hr(style = "border-top: 1px solid #ccc; margin-top: 20px; margin-bottom: 20px;"),
+                              #It is added here instead of in the narrative since the narrative can have multiple columns.
+                              #If there are multiple narrative columns and the line is added there than the line consists of multiple breaks
+                              tags$hr(style = "border-top: 2px solid #4d4d4d; margin-top: 20px; margin-bottom: 20px;"),
                               box(plotOutput("lead_state")),
                               box(plotOutput("lead_region"))
                             ),
@@ -279,7 +375,7 @@ ui <- dashboardPage(
                    ),
                    tabPanel("Drinking Water Quality"),
                    tabPanel("Pesticide Poisoning"),
-                   tabPanel("Radon"),
+                   tabPanel("Radon")
                  )
                )
              )
@@ -485,7 +581,7 @@ server <- function(input, output, session) {
       updateSelectInput(
         session, "parGlobal_region",
         choices =  unique(df_schsacRaw$Region[order(df_schsacRaw$County == input$parGlobal_county, decreasing = TRUE)]),
-        selected = unique(df_schsacRaw$Region[order(df_schsacRaw$County == input$parGlobal_county, decreasing = TRUE)])[1] #Default to the first choice, which will automatically change the cascading results when the parameter is mapped to a ggplot
+        selected = unique(df_schsacRaw$Region[order(df_schsacRaw$County == input$parGlobal_county, decreasing = TRUE)])[1] #Default to the first choice, which will automatically change the cascading results when the parameter changes
       )
     }
     else {
@@ -506,7 +602,7 @@ server <- function(input, output, session) {
       updateSelectInput(
         session, "parGlobal_chb",
         choices =  unique(df_chbRaw$CHB[order(df_chbRaw$County == input$parGlobal_county, decreasing = TRUE)]),
-        selected = unique(df_chbRaw$CHB[order(df_chbRaw$County == input$parGlobal_county, decreasing = TRUE)])[1] #Default to the first choice, which will automatically change the cascading results when the parameter is mapped to a ggplot
+        selected = unique(df_chbRaw$CHB[order(df_chbRaw$County == input$parGlobal_county, decreasing = TRUE)])[1] #Default to the first choice, which will automatically change the cascading results when the parameter changes
       )
     }
     else {
@@ -689,7 +785,7 @@ server <- function(input, output, session) {
       guides(color = guide_legend(title = "Age Group"))+
       scale_color_discrete(breaks=c('<3 years', '3-<6 years', '<6 years'))+
       #Had this
-      # scale_x_discrete(limits = df_leadRaw$year, guide = guide_axis(n.dodge = 2))+
+      # scale_x_discrete(limits = df_leadRaw$year, guide = guide_axis(n.dodge = 2))+ 
       scale_x_discrete(limit= df_leadRaw$year, breaks = seq(min(df_leadRaw$year), max(df_leadRaw$year), 2))+ # add breaks argument here Microsoft Copilot AI generated
       #Sets y axis for the same of all the graphs
       scale_y_continuous(limits= c(0, 60)) +
@@ -713,7 +809,7 @@ server <- function(input, output, session) {
   output$lead_county <-  renderPlot({
     #Open parenthesis since it is dynamic
     lead_county_sub() |>
-  
+    
       ggplot(aes(x= year, y= pctTested, color= ageGroup)) +
       geom_line()+
       geom_point()+
@@ -1267,4 +1363,3 @@ server <- function(input, output, session) {
 }
 
 shinyApp(ui=ui, server=server)
-
