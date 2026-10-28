@@ -410,7 +410,7 @@ chb_raw_02$CHB <-  paste("<b>", chb_raw_02$CHB, "</b>") #Bold CHBs so it is easi
 # Combine Region
 # A lot of sources online say to use all= TRUE after the by condition for an inner. 
 # This does not appear to be correct. It seems like it is executing an outer join not an inner join
-lead_Region <- merge(x= df_leadRaw, y= df_schsacRaw, by.x= "location", by.y= "County") #, all = TRUE) Don't include the all = TRUE 
+lead_Region <- merge(x= df_leadRaw, y= df_schsacRaw, by.x= "location", by.y= "county") #, all = TRUE) Don't include the all = TRUE 
 
 # #https://www.youtube.com/watch?v=zmiC7X9fUmo
 # First sum number tested
