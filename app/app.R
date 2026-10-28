@@ -356,7 +356,7 @@ ui <- dashboardPage(
                                 tags$h3("Data for this project can be found ",
                                         tags$a(href = "https://data.web.health.state.mn.us/lead_query", "here!", target = "_blank", tabindex = "0")),
                                 tags$h3("Data for this project is stored ",
-                                        tags$a(href = "https://raw.githubusercontent.com/quinCHB/Public-Data-Sources/main/MN%20Public%20Health%20Data%20Access%20Portal/Healthy%20Homes/Childhood%20Lead%20Exposure.csv",
+                                        tags$a(href = "https://raw.githubusercontent.com/lphmn/data_publicState/refs/heads/main/MN_PHDAP/healthyHomes/childhoodLeadExposure.csv",
                                                "here!", target = "_blank", tabindex = "0"))
                               )
                             ),
